@@ -73,7 +73,7 @@ object NativeBuild {
         log.info(cCommandLine mkString " ")
         val exitCode = Process(cCommandLine) ! log
         if (exitCode != 0) {
-          sys.error("c compiler exited with " + exitCode)
+          error("c compiler exited with " + exitCode)
         }
       }
 
@@ -88,7 +88,7 @@ object NativeBuild {
         log.info(fCommandLine mkString " ")
         val exitCode = Process(fCommandLine) ! log
         if (exitCode != 0) {
-          sys.error("fortran compiler exited with " + exitCode)
+          error("fortran compiler exited with " + exitCode)
         }
       }
 
@@ -104,7 +104,7 @@ object NativeBuild {
       log.info(ldCommandLine mkString " ")
       val exitCode = Process(ldCommandLine) ! log
       if (exitCode != 0) {
-        sys.error("linker exited with " + exitCode)
+        error("linker exited with " + exitCode)
       }
 
       Seq(file(soName.toString))
