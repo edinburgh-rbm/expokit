@@ -17,13 +17,16 @@ object JniBuild {
   import JniKeys._
   import NativeKeys._
 
+  private val jdkHome = file(System.getProperty("java.home")) / ".."
+  private val jdkInclude = jdkHome / "include"
+  private val jdkOsInclude = jdkInclude / System.getProperty("os.name").toLowerCase
   lazy val jniSettings = Seq(
     javahName := "javah",
     javahPath <<= (javaHome, javahName) apply { (home, name) =>
       home map ( h => (h / "bin" / name).absolutePath ) getOrElse name
     },
     jniClasses := Seq.empty,
-    cIncludes += (file(System.getProperty("java.home")) / ".." / "include").toString,
+    cIncludes ++= Seq(jdkInclude.toString, jdkOsInclude.toString),
     libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value,
     javah in Compile := {
       val log = streams.value.log
