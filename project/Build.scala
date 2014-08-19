@@ -35,6 +35,8 @@ object ExpBuild extends Build {
           libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.0" % "test",
           jniClasses := Seq("uk.ac.ed.inf.expokit.ExpoKitC"),
           ldLibraries ++= Seq("lapack", "blas"),
+          cFlags ++= Seq("-g", "-Df2cFortran"),
+          fFlags += "-g",
           sharedLibrary := "expokit"
         )
   )

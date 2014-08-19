@@ -1,5 +1,5 @@
 /*
- *  Exponential Shared Library Loader
+ *  ExpoKit Shared Library Scala Language bindings
  *  Copyright (C) 2014 University of Edinburgh
  *
  *  This program is free software: you can redistribute it and/or modify
@@ -17,14 +17,6 @@
  */
 package uk.ac.ed.inf.expokit
 
-import com.github.fommil.jni.{JniLoader, JniNamer}
-
 private class ExpoKitC {
-  @native def hello(n: Int): Int
-}
-
-object ExpoKit {
-  JniLoader.load(JniNamer.getJniName("expokit"))
-  private val native = new ExpoKitC
-  def hello(n: Int) = native.hello(n)
+  @native def dgpadm(ideg: Int, m: Int, t: Double, H: Array[Double], R: Array[Double]): Int
 }
