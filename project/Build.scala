@@ -1,6 +1,6 @@
 /*
  *  Native Exponentiation Methods for Scala
- *  Copyright (C) 2014 Weisse et al
+ *  Copyright (C) 2014 University of Edinburgh
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -27,11 +27,10 @@ object ExpBuild extends Build {
     settings=
       Defaults.defaultSettings ++ NativeBuild.nativeSettings ++ JniBuild.jniSettings ++
         Seq(
-          name := "expokit",
+          name := "expokit-" + OS.os + "-" + OS.arch + OS.abi(OS.arch),
           organization := "uk.ac.ed.inf",
           version := "0.1-SNAPSHOT",
           scalaVersion := "2.11.2",
-//          resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
           libraryDependencies += "com.github.fommil" % "jniloader" % "1.1",
           libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.0" % "test",
           jniClasses := Seq("uk.ac.ed.inf.expokit.ExpoKitC"),
