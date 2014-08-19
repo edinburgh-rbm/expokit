@@ -23,6 +23,7 @@ object JniBuild {
       home map ( h => (h / "bin" / name).absolutePath ) getOrElse name
     },
     jniClasses := Seq.empty,
+    cIncludes += (file(System.getProperty("java.home")) / ".." / "include").toString,
     libraryDependencies += "org.scala-lang" % "scala-reflect" % scalaVersion.value,
     javah in Compile := {
       val log = streams.value.log

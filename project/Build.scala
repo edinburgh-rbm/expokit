@@ -25,7 +25,7 @@ object ExpBuild extends Build {
     id="root",
     base=file("."),
     settings=
-      Defaults.defaultSettings ++ JniBuild.jniSettings ++ NativeBuild.nativeSettings ++
+      Defaults.defaultSettings ++ NativeBuild.nativeSettings ++ JniBuild.jniSettings ++
         Seq(
           name := "expokit",
           organization := "uk.ac.ed.inf",
@@ -35,7 +35,6 @@ object ExpBuild extends Build {
           libraryDependencies += "com.github.fommil" % "jniloader" % "1.1",
           libraryDependencies += "org.scalatest" %% "scalatest" % "2.2.0" % "test",
           jniClasses := Seq("uk.ac.ed.inf.expokit.ExpoKitC"),
-          cIncludes += "/usr/lib/jvm/java-7-openjdk-amd64/include/",
           ldLibraries ++= Seq("lapack", "blas"),
           sharedLibrary := "expokit"
         )
