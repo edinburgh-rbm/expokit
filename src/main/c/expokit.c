@@ -19,11 +19,24 @@ inline void check_memory(JNIEnv *env, void *arg) {
 		     "Out of memory transferring array to native code in F2J JNI");
 }
 
+/*
+ * Calculage exp(t*H)
+ *
+ * ideg is the degree of the Pade polynomial (6 is usually sufficient)
+ *
+ * m is the order of the matrix H
+ *
+ * t is t
+ *
+ * H is the input matrix
+ *
+ * R is the result
+ */
 JNIEXPORT jint JNICALL Java_uk_ac_ed_inf_expokit_ExpoKitC_dgpadm(
     JNIEnv *env, jobject calling_obj,
     jint ideg, jint m, jdouble t, jdoubleArray H, jdoubleArray R)
 {
-    double *jni_H = NULL;
+    double *jni_H = NULL; // input array
     double *jni_R = NULL;
     double *wsp = NULL;
     int *ipiv = NULL;
@@ -34,9 +47,11 @@ JNIEXPORT jint JNICALL Java_uk_ac_ed_inf_expokit_ExpoKitC_dgpadm(
     check_memory(env, H);
     check_memory(env, R);
 
+    // work space
     wsp = (jdouble *)malloc(lwsp*sizeof(jdouble));
     check_memory(env, wsp);
 
+    // more work space
     ipiv = (jint *)malloc(m*sizeof(jint));
     check_memory(env, wsp);
 
@@ -50,7 +65,8 @@ JNIEXPORT jint JNICALL Java_uk_ac_ed_inf_expokit_ExpoKitC_dgpadm(
     jni_R = (*env)->GetPrimitiveArrayCritical(env, R, JNI_FALSE);
     check_memory(env, jni_R);
 
-
+    // the result is at offset iexph into the workspace. iexph is
+    // from fortran-land where idexes start at 1.
     memmove(jni_R, wsp+iexph-1, m*m*sizeof(jdouble));
 
     (*env)->ReleasePrimitiveArrayCritical(env, R, jni_R, 0);
