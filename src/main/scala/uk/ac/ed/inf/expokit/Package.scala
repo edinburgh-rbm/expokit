@@ -81,4 +81,87 @@ package object expokit {
   @inline final def dgchbv(
     m: Int, t: Double, H: Array[Double], y: Array[Double]
   ) = native.dgchbv(m, t, H, y)
+
+  /** DGEXPV
+    *-----Purpose----------------------------------------------------------|
+    *
+    *---  DGEXPV computes w = exp(t*A)*v - for a General matrix A.
+    *
+    *     It does not compute the matrix exponential in isolation but
+    *     instead, it computes directly the action of the exponential
+    *     operator on the operand vector. This way of doing so allows
+    *     for addressing large sparse problems.
+    *
+    *     The method used is based on Krylov subspace projection
+    *     techniques and the matrix under consideration interacts only
+    *     via the external routine `matvec' performing the matrix-vector
+    *     product (matrix-free method).
+    *
+    *-----Arguments--------------------------------------------------------|
+    *
+    * @param n (input) order of the principal matrix A.
+    *
+    * @param m (input) maximum size for the Krylov basis.
+    *
+    * @param t (input) time at wich the solution is needed (can be < 0).
+    *
+    * @param A (input) principal matrix A
+    *
+    * @param v(n) (input) given operand vector.
+    *
+    * @param w(n) (output) computed approximation of exp(t*A)*v.
+    *
+    * @param tol (input/output) the requested accuracy tolerance on w.
+    *            If on input tol=0.0d0 or tol is too small (tol.le.eps)
+    *            the internal value sqrt(eps) is used, and tol is set to
+    *            sqrt(eps) on output (`eps' denotes the machine epsilon).
+    *            (`Happy breakdown' is assumed if h(j+1,j) .le. anorm*tol)
+    *            N.B. input only for the JVM!
+    */
+  @inline final def dgexpv(n: Int, m: Int, t: Double, A: Array[Double], v: Array[Double],
+    w: Array[Double], tol: Double, anorm: Double
+  ) = native.dgexpv(n, m, t, A, v, w, tol, anorm)
+
+  /** DGPHIV
+    *-----Purpose----------------------------------------------------------|
+    *
+    *---  DGPHIV computes w = exp(t*A)v + t*phi(tA)u which is the solution
+    *     of the nonhomogeneous linear ODE problem w' = Aw + u, w(0) = v.
+    *     phi(z) = (exp(z)-1)/z and A is a General matrix.
+    *
+    *     The method used is based on Krylov subspace projection
+    *     techniques and the matrix under consideration interacts only
+    *     via the external routine `matvec' performing the matrix-vector
+    *     product (matrix-free method).
+    *
+    *-----Arguments--------------------------------------------------------|
+    *
+    * @param n (input) order of the principal matrix A.
+    *
+    * @param m (input) maximum size for the Krylov basis.
+    *
+    * @param t (input) time at wich the solution is needed (can be < 0).
+    *
+    * @param A (input) principal matrix A
+    *
+    * @param u(n) (input) operand vector with respect to the phi function
+    *             (forcing term of the ODE problem).
+    *
+    * @param v(n) (input) operand vector with respect to the exp function
+    *             (initial condition of the ODE problem).
+    *
+    * @param w(n) (output) computed approximation of exp(t*A)v + t*phi(tA)u
+    *
+    * @param tol (input/output) the requested accuracy tolerance on w.
+    *            If on input tol=0.0d0 or tol is too small (tol.le.eps)
+    *            the internal value sqrt(eps) is used, and tol is set to
+    *            sqrt(eps) on output (`eps' denotes the machine epsilon).
+    *            (`Happy breakdown' is assumed if h(j+1,j) .le. anorm*tol)
+    *            N.B. input only for the JVM!
+    *
+    * @param anorm (input) an approximation of some norm of A.
+    */
+  @inline final def dgphiv(n: Int, m: Int, t: Double, A: Array[Double], u: Array[Double],
+    v: Array[Double], w: Array[Double], tol: Double, anorm: Double
+  ) = native.dgphiv(n, m, t, A, u, v, w, tol, anorm)
 }

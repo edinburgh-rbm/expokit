@@ -132,7 +132,10 @@
       if ( lwsp.lt.n*(m+3)+5*(m+3)**2+ideg+1 ) iflag = -1
       if ( liwsp.lt.m+3 ) iflag = -2
       if ( m.ge.n .or. m.le.0 ) iflag = -3
-      if ( iflag.ne.0 ) stop 'bad sizes (in input of DGPHIV)'
+      if ( iflag.ne.0 ) then
+         print*,'bad sizes (in input of DGPHIV)'
+         return
+      endif
 *
 *---  initialisations ...
 *

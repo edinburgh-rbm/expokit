@@ -56,7 +56,7 @@ class ExpoKitTest extends FlatSpec with Matchers {
     }
   }
 
-  "dgpadm" should "compute exp(t*H)" in {
+  "dgpadm" should "compute exp(t*H) with Pade approximation" in {
     val precision = 1e-3
     implicit val doubleEquality =
       TolerantNumerics.tolerantDoubleEquality(precision)
@@ -64,7 +64,7 @@ class ExpoKitTest extends FlatSpec with Matchers {
     val ideg = 6
 
     val R = Array.fill(m*m)(0.0)
-    expokit.dgpadm(ideg, m, t, H, R)
+    expokit.dgpadm(ideg, m, t, H, R) should equal (0)
 
 /*
     println(s"H = ")
@@ -83,17 +83,79 @@ class ExpoKitTest extends FlatSpec with Matchers {
     }
   }
 
-  "dgchbv" should "compute exp(t*H)y" in {
+  "dgchbv" should "compute exp(t*H)y with Chebyshev approximation" in {
     val precision = 1e-3
     implicit val doubleEquality =
       TolerantNumerics.tolerantDoubleEquality(precision)
 
     val y = Array.fill(m)(0.0)
     y(0) = 1
-    expokit.dgchbv(m, t, H, y)
+    expokit.dgchbv(m, t, H, y) should equal (0)
 
     for (i <- 0 until m) {
       y(i) should equal (Expected(i*5))
     }
   }
+
+  ignore should "compute exp(t*H)y with Krylov subspace iteration" in {
+    val precision = 1e-3
+    implicit val doubleEquality =
+      TolerantNumerics.tolerantDoubleEquality(precision)
+
+    val y = Array.fill(m)(0.0)
+    y(0) = 1
+    val n = 30
+
+    val w = Array.fill(m)(0.0)
+    val tol = 0.0
+    val anorm = 3.2556
+
+    expokit.dgexpv(m, m-1, t, H, y, w, tol, anorm)
+
+    println(y.toList)
+    println(w.toList)
+    for (i <- 0 until m) {
+      w(i) should equal (Expected(i*5))
+    }
+  }
+
+  "dgphiv" should "compute exp(t*H)v + t*phi(t*H)u with Krylov subspace iteration" in {
+    val precision = 1e-3
+    implicit val doubleEquality =
+      TolerantNumerics.tolerantDoubleEquality(precision)
+
+    val u = Array.fill(m)(1.0)
+    val uz = Array.fill(m)(0.0)
+    val v = Array.fill(m)(1.0)
+    val vz = Array.fill(m)(0.0)
+    val w1 = Array.fill(m)(0.0)
+    val w3 = Array.fill(m)(0.0)
+    val w2 = Array.fill(m)(0.0)
+    val tol = 0.0
+    val anorm = 3.2556
+
+    expokit.dgphiv(m, m-1, t, H, uz, v, w1, tol, anorm)
+    expokit.dgphiv(m, m-1, t, H, u, vz, w2, tol, anorm)
+    expokit.dgphiv(m, m-1, t, H, u, v, w3, tol, anorm)
+
+/*
+    println(w1.toList)
+    println(w2.toList)
+    println(w3.toList)
+
+    for (i <- 0 until m) {
+      w(i) should equal (Expected(i*5))
+    }
+ */
+
+    val aa = Array.fill(4)(1.0)
+//    aa(1) = -1
+    val uu = Array.fill(2)(0.0)
+    val vv = Array.fill(2)(1.0)
+    val ww = Array.fill(2)(0.0)
+    expokit.dgphiv(2, 1, 1, aa,uu,vv,ww, tol, 1.0) should be (0)
+    ww(0) should equal (7.3891) // e**2
+    ww(1) should equal (7.3891)
+  }
+
 }

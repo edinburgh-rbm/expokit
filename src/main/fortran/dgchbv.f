@@ -85,7 +85,10 @@
             wsp(iy+j-1) = wsp(iz+j-1)
          enddo
          call ZGESV( M, 1, WSP(iH),M, IWSP, WSP(iY),M, IFLAG )
-         if ( IFLAG.ne.0 ) stop 'Error in DGCHBV'
+         if ( IFLAG.ne.0 ) then
+            print*,'Error in DGCHBV'
+            return
+         endif
 *---     Accumulate the partial result in y ...     
          do j = 1,m
             y(j) = y(j) + DBLE( alpha(ip)*wsp(iy+j-1) )

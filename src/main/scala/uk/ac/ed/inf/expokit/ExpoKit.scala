@@ -20,4 +20,8 @@ package uk.ac.ed.inf.expokit
 private class ExpoKitC {
   @native def dgpadm(ideg: Int, m: Int, t: Double, H: Array[Double], R: Array[Double]): Int
   @native def dgchbv(m: Int, t: Double, H: Array[Double], y: Array[Double]): Int
+  @native def dgexpv(n: Int, m: Int, t: Double, A: Array[Double], v: Array[Double],
+    w: Array[Double], tol: Double, anorm: Double): Int
+  @native def dgphiv(n: Int, m: Int, t: Double, A: Array[Double], u: Array[Double],
+    v: Array[Double], w: Array[Double], tol: Double, anorm: Double): Int
 }

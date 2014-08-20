@@ -141,7 +141,10 @@
       if ( lwsp.lt.n*(m+2)+5*(m+2)**2+ideg+1 ) iflag = -1
       if ( liwsp.lt.m+2 ) iflag = -2
       if ( m.ge.n .or. m.le.0 ) iflag = -3
-      if ( iflag.ne.0 ) stop 'bad sizes (in input of DGEXPV)'
+      if ( iflag.ne.0 ) then
+         print*,'bad sizes (in input of DGEXPV)'
+         return
+      endif
 *
 *---  initialisations ...
 *
@@ -292,6 +295,7 @@
             xm = 1.0d0/DBLE( m-1 )
          endif
       endif
+
 *
 *---  reject the step-size if the error is not acceptable ...
 *   
