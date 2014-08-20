@@ -15,7 +15,7 @@ form
 This software is part of the [Module Integration Simulator]
 developed at the [University of Edinburgh School of Informatics].
 
-Do build with sbt:
+To build with sbt:
 
 ~~~~~
 > compile
@@ -23,6 +23,8 @@ Do build with sbt:
 > native
 > test
 ~~~~~
+
+See the tests for usage examples.
 
 [Expokit]: http://www.maths.uq.edu.au/expokit/
 [Module Integration Simulator]: https://edinburgh-rbm.github.io/
