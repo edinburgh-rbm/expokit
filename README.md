@@ -5,7 +5,8 @@ JVM Bindings for Expokit
 calculating various kinds of matrix exponentials of the 
 form
 
-   * exp(t*H) - Pade and Chebyshev approximations
+   * exp(t*H) - Pade approximation
+   * exp(t*H)*v - Chebyshev approximations
    * exp(t*H)*v - Krylov subspace iteration
    * exp(t*H)*v + t*phi(t*H)*u - Exponential Euler solution
      of the initial value problem w' = Hw +u, w(0) = v, with

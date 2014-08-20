@@ -24,6 +24,24 @@ import uk.ac.ed.inf.expokit
 
 class ExpoKitTest extends FlatSpec with Matchers {
 
+  val t = 2.0
+  val m = 5
+  val H = Array(
+    -0.2265e1,  0.3401,  0.1605,  0.3114,  0.6003,
+    0.3401, -0.2390e1,  0.8465,  0.3564,  0.8367,
+    0.1605,  0.8465, -0.2290e1,  0.5922,  0.5924,
+    0.3114,  0.3564,  0.5922, -0.1982e1,  0.3205,
+    0.6003,  0.8367,  0.5924,  0.3205, -0.1648e1
+  )
+
+  val Expected = Array(
+    0.0999,  0.1385,  0.1304,  0.1082,  0.1775,
+    0.1385,  0.2125,  0.2014,  0.1626,  0.2648,
+    0.1304,  0.2014,  0.1953,  0.1582,  0.2502,
+    0.1082,  0.1626,  0.1582,  0.1388,  0.2020,
+    0.1775,  0.2648,  0.2502,  0.2020,  0.3404
+  )
+
   def prmatrix(H: Array[Double], m: Int) {
     import java.lang.Math.min
     for (i <- 0 until m) {
@@ -44,25 +62,8 @@ class ExpoKitTest extends FlatSpec with Matchers {
       TolerantNumerics.tolerantDoubleEquality(precision)
 
     val ideg = 6
-    val m = 5
-    val H = Array(
-      -0.2265e1,  0.3401,  0.1605,  0.3114,  0.6003,
-      0.3401, -0.2390e1,  0.8465,  0.3564,  0.8367,
-      0.1605,  0.8465, -0.2290e1,  0.5922,  0.5924,
-      0.3114,  0.3564,  0.5922, -0.1982e1,  0.3205,
-      0.6003,  0.8367,  0.5924,  0.3205, -0.1648e1
-    )
-
-    val Expected = Array(
-      0.0999,  0.1385,  0.1304,  0.1082,  0.1775,
-      0.1385,  0.2125,  0.2014,  0.1626,  0.2648,
-      0.1304,  0.2014,  0.1953,  0.1582,  0.2502,
-      0.1082,  0.1626,  0.1582,  0.1388,  0.2020,
-      0.1775,  0.2648,  0.2502,  0.2020,  0.3404
-    )
 
     val R = Array.fill(m*m)(0.0)
-    val t = 2.0
     expokit.dgpadm(ideg, m, t, H, R)
 
 /*
@@ -79,6 +80,20 @@ class ExpoKitTest extends FlatSpec with Matchers {
 
     for (i <- 0 until H.size) {
       R(i) should equal (Expected(i))
+    }
+  }
+
+  "dgchbv" should "compute exp(t*H)y" in {
+    val precision = 1e-3
+    implicit val doubleEquality =
+      TolerantNumerics.tolerantDoubleEquality(precision)
+
+    val y = Array.fill(m)(0.0)
+    y(0) = 1
+    expokit.dgchbv(m, t, H, y)
+
+    for (i <- 0 until m) {
+      y(i) should equal (Expected(i*5))
     }
   }
 }

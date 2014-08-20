@@ -42,17 +42,16 @@ JNIEXPORT jint JNICALL Java_uk_ac_ed_inf_expokit_ExpoKitC_dgpadm(
     int *ipiv = NULL;
     int iexph = 0, ns = 0, iflag = 0;
     int lwsp = 4*m*m+ideg+1;
-    int i;
 
     check_memory(env, H);
     check_memory(env, R);
 
     // work space
-    wsp = (jdouble *)malloc(lwsp*sizeof(jdouble));
+    wsp = (double *)malloc(lwsp*sizeof(double));
     check_memory(env, wsp);
 
     // more work space
-    ipiv = (jint *)malloc(m*sizeof(jint));
+    ipiv = (int *)malloc(m*sizeof(int));
     check_memory(env, wsp);
 
     jni_H = (*env)->GetPrimitiveArrayCritical(env, H, JNI_FALSE);
@@ -73,6 +72,46 @@ JNIEXPORT jint JNICALL Java_uk_ac_ed_inf_expokit_ExpoKitC_dgpadm(
 
     free(ipiv);
     free(wsp);
+
+    return iflag;
+}
+
+/*
+ * Calculate exp(t*H)y
+ *
+ * m is the order of H (and length of y)
+ */
+JNIEXPORT jint JNICALL Java_uk_ac_ed_inf_expokit_ExpoKitC_dgchbv(
+    JNIEnv *env, jobject calling_obj, 
+    jint m, jdouble t, jdoubleArray H, jdoubleArray y)
+{
+    double *jni_H = NULL; // input array
+    double *jni_y = NULL;
+    double *wsp = NULL;
+    int *iwsp = NULL;
+    int iflag = 0;
+
+    check_memory(env, H);
+    check_memory(env, y);
+
+    // work space, this is actually of size m*(m+2)*sizeof(complex 16)
+    wsp = (double *)malloc(2*m*(m+2)*sizeof(double));
+    check_memory(env, wsp);
+
+    // more work space
+    iwsp = (int *)malloc(m*sizeof(int));
+    check_memory(env, iwsp);
+
+    jni_H = (*env)->GetPrimitiveArrayCritical(env, H, JNI_FALSE);
+    check_memory(env, jni_H);
+
+    jni_y = (*env)->GetPrimitiveArrayCritical(env, y, JNI_FALSE);
+    check_memory(env, jni_y);
+
+    DGCHBV(m, t, jni_H, m, jni_y, wsp, iwsp, &iflag);
+
+    (*env)->ReleasePrimitiveArrayCritical(env, y, jni_y, 0);
+    (*env)->ReleasePrimitiveArrayCritical(env, H, jni_H, 0);
 
     return iflag;
 }

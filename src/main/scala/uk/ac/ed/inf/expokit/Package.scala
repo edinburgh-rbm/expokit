@@ -56,4 +56,29 @@ package object expokit {
   @inline final def dgpadm(
     ideg: Int, m: Int, t: Double, H: Array[Double], R: Array[Double]
   ) = native.dgpadm(ideg, m, t, H, R)
+
+  /** DHCHBV
+    *
+    *-----Purpose----------------------------------------------------------|
+    *
+    *---  DGCHBV computes y = exp(t*H)*y using the partial fraction
+    *     expansion of the uniform rational Chebyshev approximation
+    *     to exp(-x) of type (14,14). H is a General matrix.
+    *     About 14-digit accuracy is expected if the matrix H is negative
+    *     definite. The algorithm may behave poorly otherwise.
+    *
+    *-----Arguments--------------------------------------------------------|
+    *
+    * @param m (input) order of the matrix H
+    *
+    * @param t (input) time-scaling factor (can be < 0).
+    *
+    * @param H(m,m) (input) argument matrix.
+    *
+    * @param y(m) (input/output) on input the operand vector,
+    *             on output the resulting vector exp(t*H)*y.
+    */
+  @inline final def dgchbv(
+    m: Int, t: Double, H: Array[Double], y: Array[Double]
+  ) = native.dgchbv(m, t, H, y)
 }
