@@ -25,4 +25,4 @@ Do build with sbt:
 
 [Expokit]: http://www.maths.uq.edu.au/expokit/
 [Module Integration Simulator]: https://edinburgh-rbm.github.io/
-[University of Edinburgh School of Informatics] http://www.inf.ed.ac.uk/
+[University of Edinburgh School of Informatics]: http://www.inf.ed.ac.uk/
