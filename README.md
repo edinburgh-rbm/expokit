@@ -24,6 +24,8 @@ To build with sbt:
 > test
 ~~~~~
 
+It requires the BLAS and LAPACK libraries to be installed.
+
 See the tests for usage examples.
 
 [Expokit]: http://www.maths.uq.edu.au/expokit/
